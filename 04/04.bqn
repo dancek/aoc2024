@@ -1,14 +1,14 @@
-in ← >•FLines"sample"
-Diag ← {(↕≠𝕩)⌽˘𝕩}
+in ← >•FLines"/dev/stdin"
+Diag ← ((↕≠)⌽˘⊢)
 Cols ← <˘⍉
 dirs ← ⊢‿⍉‿Diag‿(Diag∘⌽)
 
 padded ← (1+≢in)↑in
 strs ← (⌽¨∾⊢) ∾´Cols¨{𝕏 padded}¨dirs
 •Show +´∾´"XMAS"⊸⍷¨strs  # star 1
-mas2← >"M.S"‿".A."‿"M.S"
-mas2⍷in
-# TODO: diagonaalit molempiin suuntiin, "MAS"⍷, jotenkin » keskimmäisen kirjaimen kohdalle, palautus oikeaan muotoon ⌾ ja maskien yhdistäminen ×
-abc← >"ABC"‿"DEF"‿"GHI"
 
-Diag∘⌽ abc
+mas ← >"M"‿"A"‿"S"
+FindMAS ← {»(≢padded)↑((⌽mas)⊸⍷𝕩)+(mas⊸⍷𝕩)}
+mas1 ← (FindMAS ⌾ (Diag∘⌽)) padded
+mas2 ← (FindMas ⌾ Diag) padded
+•Show +´⥊mas1 × mas2  # star 2
