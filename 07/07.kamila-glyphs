@@ -1,0 +1,22 @@
+(○← lines (⍫↩ (⍫⊢ "/dev/stdin")))
+(⍥← parse (line)
+    (⊙⍫ (⍫⊖∊∧ "[0-9]+" line (λ (m) m.match))))
+(○← in (:parse lines))
+
+(⍥← +* (xs)
+    (⌿← (λ (xs y) (⍠ (:+ xs y) (:* xs y)))
+        (↑ 1 xs) (⍕ xs)))
+
+(⍥← | (a b) (⊙⍫ (⍫∊ "{?a}{?b}")))
+(⍥← +*| (xs)
+    (⌿← (λ (xs y) (⍠ (:+ xs y) (:* xs y) (:| xs y)))
+        (↑ 1 xs) (⍕ xs)))
+
+(⍥← valid (calc-fn xs)
+    (< 0 (⍴ (⍭ $(= (⍎ xs)) (calc-fn (⍕ xs))))))
+
+(⍥← solve (calc-fn data)
+    (⌿← + 0 (:⍎ (⍭ $(valid calc-fn) data))))
+
+(↑⍫ (⍫∊ "{solve +* in}"))
+(↑⍫ (⍫∊ "{solve +*| in}"))
