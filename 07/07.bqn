@@ -7,5 +7,5 @@ Valid ← {t‿xs ← HeadTail 𝕩
          ∨´t= 𝕨 Calc HeadTail xs}
 •Show +´⊑¨ ⟨+,×⟩⊸Valid¨⊸/in
 
-Concat←{𝕩+𝕨×10⋆1+⌊10⋆⁼𝕩}
+Concat ← {𝕩+𝕨×10⋆1+⌊10⋆⁼𝕩}
 •Show +´⊑¨ ⟨+,×,Concat⟩⊸Valid¨⊸/in
