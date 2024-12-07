@@ -1,0 +1,22 @@
+(def lines (str:lines (io:get-file "/dev/stdin")))
+(defun parse (line)
+    (parse-number (regex:match-all "[0-9]+" line (lambda (m) m.match))))
+(def in (:parse lines))
+
+(defun +* (xs)
+    (foldl (lambda (xs y) (append (:+ xs y) (:* xs y)))
+        (take 1 xs) (cdr xs)))
+
+(defun | (a b) (parse-number (str:format "{?a}{?b}")))
+(defun +*| (xs)
+    (foldl (lambda (xs y) (append (:+ xs y) (:* xs y) (:| xs y)))
+        (take 1 xs) (cdr xs)))
+
+(defun valid (calc-fn xs)
+    (< 0 (tally (filter $(= (car xs)) (calc-fn (cdr xs))))))
+
+(defun solve (calc-fn data)
+    (foldl + 0 (:car (filter $(valid calc-fn) data))))
+
+(io:writeln (str:format "{solve +* in}"))
+(io:writeln (str:format "{solve +*| in}"))
