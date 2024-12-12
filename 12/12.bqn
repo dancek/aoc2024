@@ -1,7 +1,7 @@
-in ← >•FLines"input"
+in ← >•FLines"/dev/stdin"
 e  ← (≢in)↑0
 h  ← e
-tp ← 0
+t1 ← t2 ← 0
 
 mv    ← ⟨»,»˘,«,«˘⟩
 Fill  ← {𝕊p: p∨ ∨´{(𝕏p) ∧ in=𝕏 in}¨mv}
@@ -12,9 +12,12 @@ Next ← {𝕊
   a  ← 1⌾(i⊸⊑∘⥊)e
   p  ← Fill _fixp a
   fs ← +´{p>𝕏p}¨mv
-  tp +↩ (+´⥊p) × +´⥊fs
+  es ← +´⥊+´{⍉>⟜𝕏⍉p>𝕏p}¨mv
+  t1 +↩ (+´⥊p) × +´⥊fs
+  t2 +↩ (+´⥊p) × es
   h  ∨↩ p
 }
 
 {𝕊⋄Next@}•_while_{𝕊⋄¬∧´⥊h}@
-•Show tp
+•Show t1
+•Show t2
