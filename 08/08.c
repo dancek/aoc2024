@@ -1,36 +1,32 @@
 #include<stdio.h>
-char ant[9999],nod[9999]; int sz, crds[256][5];
+#define oob(x,y) (x<0||x>=sz||y<0||y>=sz)
+char ant[9999],n1[9999],n2[9999]; int sz,crds[256][5];
 
 void addc(char c, int crd) { int i=0;
-    printf("addc %c %d\n", c,crd);
     while(crds[c][i]>0) i++;
     crds[c][i] = crd; }
-void read() { int i=0, c;
+void read() { int i=0,c;
     while((c=getchar())) {
         if (c<0) return;
-        if (c=='\n') { if (!sz) sz=i;
-        }else{ if (c!='.') addc(c,i);
-            ant[i++] = c;}}}
-void addn(int x, int y) {
-    if (x<0 || y<0 || x>=sz || y>=sz) return;
-    printf("nod %d,%d\n", x,y);
-    nod[y*sz + x]++;}
+        if (c=='\n') { if (!sz) sz=i; }
+        else { if (c!='.') addc(c,i);
+               ant[i++] = c; }}}
+int addn(char* nd, int x, int y) {
+    if (oob(x,y)) return 0;
+    nd[y*sz + x]++; return 1;}
+void addns(int x, int y, int dx, int dy) { int s=x,t=y;
+    addn(n1, x-dx, y-dy); addn(n1, x+2*dx, y+2*dy);
+    while (!oob(s,t)) { addn(n2,s,t); s-=dx; t-=dy; } s=x;t=y;
+    while (!oob(s,t)) { addn(n2,s,t); s+=dx; t+=dy; }}
 void nods(char c) { int cnt=0,i,j,x,y,X,Y,a,b,dx,dy;
-    while(crds[c][cnt]>0) printf("crds %c %d\n", c, crds[c][cnt++]);
+    while(crds[c][cnt]>0) cnt++;
     for (i=0;i<cnt;i++) for(j=i+1;j<cnt;j++) {
         a=crds[c][i]; b=crds[c][j];
         X=a%sz; Y=a/sz; x=b%sz; y=b/sz; dx=x-X; dy=y-Y;
-        printf("%c %d:%d,%d %d:%d,%d\n", c,a,X,Y,b,x,y);
-        addn(X-dx, Y-dy); addn(x+dx, y+dy); }}
+        addns(X, Y, dx, dy); }}
 
-int main() { int nodes=0;
+int main() { int s1=0,s2=0;
     read();
     for (int c=0; c<256; c++) nods(c);
-    for (int i=0; i<sz*sz; i++) if (nod[i])nodes++;
-    for (int y=0;y<sz;y++) {
-        for (int x=0;x<sz;x++) {
-            int i=y*sz+x;
-            if (nod[i]!=0) printf("#");
-            else printf("%c", ant[i]); }
-        printf("\n"); }
-    printf("%d nodes\n", nodes); }
+    for (int i=0; i<sz*sz; i++) { if(n1[i])s1++; if(n2[i])s2++; }
+    printf("%d %d\n", s1, s2); }
