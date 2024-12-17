@@ -10,6 +10,7 @@ walls ← InfMul¨>w‿w‿w‿w
 pos ← >start‿e‿e‿e
 pts ← InfMul¨¬pos
 mv ← ⟨»˘,»,«˘,«⟩
+mvI ← ⟨«˘,«,»˘,»⟩
 turn ← ⟨¯1⊸⌽,1⊸⌽⟩
 
 Step ← {𝕊 pts:
@@ -18,4 +19,14 @@ Step ← {𝕊 pts:
   walls⌈pts⌊turn_pts⌊mv_pts
 }
 Star1 ← {⌊´⥊(⥊end)⊸/˘ ⥊˘𝕩}
-•Show Star1 Step _fixp pts
+costs ← Step _fixp pts
+•Show mincost ← Star1 costs
+
+pathend ← mincost=costs
+FindPaths ← {𝕊 paths:
+  tp ← ∨´{costs < 𝕏 costs×paths}¨turn
+  mp ← >{(𝕩⊏costs) < 𝕩◶MvI 𝕩⊏costs×paths}¨↕4
+  mp∨tp∨paths
+}
+# getting 500, correct is 486. All samples I found on Reddit are correct...
+•Show +´⥊∨˝FindPaths _fixp pathend
