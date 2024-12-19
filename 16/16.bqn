@@ -22,11 +22,10 @@ Star1 ← {⌊´⥊(⥊end)⊸/˘ ⥊˘𝕩}
 costs ← Step _fixp pts
 •Show mincost ← Star1 costs
 
-pathend ← mincost=costs
+pathend ← mincost=costs×(>end‿end‿end‿end)
 FindPaths ← {𝕊 paths:
   tp ← ∨´{costs < 𝕏 costs×paths}¨turn
   mp ← >{(𝕩⊏costs) < 𝕩◶MvI 𝕩⊏costs×paths}¨↕4
   mp∨tp∨paths
 }
-# getting 500, correct is 486. All samples I found on Reddit are correct...
 •Show +´⥊∨˝FindPaths _fixp pathend
