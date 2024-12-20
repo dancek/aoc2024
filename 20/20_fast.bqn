@@ -1,19 +1,16 @@
 _fixp ← {𝔽∘⊢⍟≢⟜𝔽_𝕣∘⊢⍟≢⟜𝔽𝕩}
+Shift ← {𝕨<0? «⍟(-𝕨) 𝕩; »⍟𝕨 𝕩}
 in ← >•Flines"input"
 wall‿start‿end ← in⊸=¨"#SE"
 cor ← ¬wall
 
 mv ← ⟨»˘,»,«˘,«⟩
-mvI ← ⟨«˘,«,»˘,»⟩
-
 Step ← {cor 𝕊 dist:
   (dist×¬cor) + dist⌊⌊´{cor × 𝕏 dist+1}¨mv
 }
-dist ← cor⊸Step _fixp (¬start)×999999¨in
-
-cheatmask ← ∨´{wall ∧ (𝕩◶MvI cor) ∧ 𝕩◶Mv cor}¨↕4
-cheats ← {(≢in)⥊1⌾(𝕩⊸⊑)0¨⥊in}¨/⥊cheatmask
-Save ← {𝕊 cheat:
-  2-˜⌊´0⊸<⊸/{+´⥊(cheat × 𝕩◶MvI dist) - cheat × 𝕩◶Mv dist}¨↕4
-}
-•Show +´100≤Save¨cheats
+d ← cor⊸Step _fixp (¯999999×start)+0¨in
+CheatSaves ← {𝕊x‿y: s←(|x)+|y
+  -⟜s {(𝕩<499999) ∧ s<𝕩}⊸/⥊ cor× d- x⊸Shift˘ y⊸Shift d}
+MDist ← {𝕊d: {d≥+´|𝕩}¨⊸/⥊ -⟜d ↕{1+2×d‿d}}
+•Show +´100≤∾´CheatSaves¨MDist 2
+•Show +´100≤∾´CheatSaves¨MDist 20
