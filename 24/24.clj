@@ -20,9 +20,33 @@
         (swap! wires assoc k v)
         v)))
 
-(defn zvalues []
-  (reverse (for [k (sort (keys @rules))
-                 :when (str/starts-with? k "z")]
-            (get-wire k))))
+(def zs (filter #(str/starts-with? % "z")
+                (reverse (sort (keys @rules)))))
 
-(println (edn/read-string (apply str "2r" (str/join (zvalues)))))
+(println (edn/read-string (apply str "2r"
+                                 (str/join (map get-wire zs)))))
+
+(defn full-rule [i k]
+  (let [indent (apply str (repeat i " "))]
+    (if (re-matches #"[xy].*" k)
+      (str indent k)
+      (when-let [[a op b] (get @rules k)]
+        (let [[s t] (sort-by count [(full-rule (inc i) a)
+                                    (full-rule (inc i) b)])]
+          (str indent "(" op "  ; " k "\n"
+                  indent s "\n"
+                  indent t ")"))))))
+(defn swap-wires [a b]
+  (let [s (get @rules a)
+        t (get @rules b)]
+    (swap! rules assoc a t b s)))
+
+;; manually found from output:
+(swap-wires "wpq" "grf")
+(swap-wires "z36" "nwq")
+(swap-wires "z22" "mdb")
+(swap-wires "z18" "fvw")
+;; fvw,grf,mdb,nwq,wpq,z18,z22,z36
+
+(doseq [k zs]
+  (println k (full-rule 4 k)))
